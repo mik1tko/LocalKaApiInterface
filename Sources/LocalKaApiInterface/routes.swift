@@ -56,8 +56,16 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
     return try await chats.usersUsernameDirectGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), username: username)
   }
   //for messages
-  groupForBearerAuth.on(.POST, "/chats/{chat_id}".asPathComponents) { (request: Request) async throws -> chatsChatIdPostResponse in
+  groupForBearerAuth.on(.GET, "/chats/{chat_id}".asPathComponents) { (request: Request) async throws -> chatsChatIdGetResponse in
+    let before = try? request.query.get(Int.self, at: "before")
+    let limit = try? request.query.get(Int.self, at: "limit")
     guard let chatId = request.parameters.get("chatId", as: String.self) else {
+      throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter chatId")
+    }
+    return try await messages.chatsChatIdGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), chatId: chatId, before: before, limit: limit)
+  }
+  groupForBearerAuth.on(.POST, "/chats/{chat_id}".asPathComponents) { (request: Request) async throws -> chatsChatIdPostResponse in
+    guard let chatId = request.parameters.get("chatId", as: UUID.self) else {
       throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter chatId")
     }
     let body = try request.content.decode(PostMessage.self)

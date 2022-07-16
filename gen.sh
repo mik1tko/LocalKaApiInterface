@@ -1,4 +1,4 @@
 #!/bin/sh
-java --add-opens=java.base/java.util=ALL-UNNAMED -cp /Users/mikita/sandbox/vapor-server-codegen/target/vapor-server-codegen-4.0.0.jar:/Users/mikita/sandbox/vapor-server-codegen/target/swagger-codegen-cli-3.0.14.jar io.swagger.codegen.v3.cli.SwaggerCodegen generate -l SwiftVapor4 -i ./api.yaml -o ../../LocalKaApiInterface --additional-properties projectName=LocalKaApiInterface
+java --add-opens=java.base/java.util=ALL-UNNAMED -cp /Users/mikita/sandbox/vapor-server-codegen/target/vapor-server-codegen-4.0.0.jar:/Users/mikita/sandbox/vapor-server-codegen/target/swagger-codegen-cli-3.0.14.jar io.swagger.codegen.v3.cli.SwaggerCodegen generate -l SwiftVapor4 -i ./api.yaml -o . --additional-properties projectName=LocalKaApiInterface
 # java -cp vapor-server-codegen-4.0.0.jar:swagger-codegen-cli-3.0.7.jar io.swagger.codegen.v3.cli.SwaggerCodegen generate -l SwiftVapor4 -i ./codegen_test.yml -o ./output/MyApiVaporInterface --additional-properties projectName=MyApiVaporInterface
 # docker run --rm -v "$(pwd):/output" thecheatah/vapor-server-codegen:4 -i api.yaml -o . --additional-properties projectName=MyProjectAPI
