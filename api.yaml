@@ -1,0 +1,388 @@
+openapi: "3.0.0"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /auth:
+    get:
+      tags: [Authentication]
+      security:
+        - basicAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponseBody"
+
+  # mark: users
+  /users/{username}:
+    get:
+      tags: [Users]
+      security:
+        - BearerAuthOptional: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users:
+    post:
+      tags: [Users]
+      security:
+        - BearerAuthOptional: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequestBody"
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  # mark: chats
+  /chats:
+    get:
+      tags: [Chats]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Chat"
+
+    post:
+      tags: [Chats]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChatBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+
+  # mark: messages
+
+  /chats/{chat_id}:
+    get:
+      tags: [Messages]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: before
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+
+  /chats/{chat_id}:
+    post:
+      tags: [Messages]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMessage"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+
+  /users/{username}/direct:
+    post:
+      tags: [Messages]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMessage"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+
+    get:
+      tags: [Chats]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+
+components:
+  securitySchemes:
+    BearerAuthOptional:
+      type: http
+      scheme: bearer
+    BearerAuth:
+      type: http
+      scheme: bearer
+    BasicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - create_at
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: string
+        create_at:
+          type: string
+          format: date-time
+        update_at:
+          type: string
+          format: date-time
+
+    CreateUserRequestBody:
+      type: object
+      additionalProperties: false
+      required:
+        - username
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: string
+
+    Chat:
+      type: object
+      required:
+        - id
+        - create_at
+        - update_at
+        - type
+      properties:
+        id:
+          type: string
+          format: uuid
+        create_at:
+          type: string
+          format: date-time
+        update_at:
+          type: string
+          format: date-time
+        last_message_at:
+          type: string
+          format: date-time
+        type:
+          $ref: "#/components/schemas/ChatType"
+        name:
+          type: string
+          description: Всегда есть у типов channel и group
+        image:
+          type: string
+          description: Всегда есть у типов channel и group
+        creator_username:
+          type: string
+          description: Для group
+        username:
+          type: string
+          description: Всегда есть у типа direct
+        is_public:
+          type: boolean
+          description: для channel и group
+
+
+    Position:
+      type: object
+      required:
+        - id
+        - create_at
+        - name
+        - creator_id
+        - is_public
+        - type
+      properties:
+        id:
+          type: string
+        create_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+        creator_id:
+          type: string
+        is_public:
+          type: boolean
+        type:
+          type: string
+          enum:
+            - point
+            - area
+        area:
+          type: object
+          properties:
+            top_left:
+              $ref: "#/components/schemas/Point"
+            bottom_right:
+              $ref: "#/components/schemas/Point"
+
+        point:
+          $ref: "#/components/schemas/Point"
+
+    Point:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+
+    Message:
+      type: object
+      required:
+        - id
+        - create_at
+      properties:
+        id:
+          type: integer
+        sender_id:
+          type: string
+          description: пока есть везде
+        text:
+          type: string
+        create_at:
+          type: string
+          format: date-time
+        update_at:
+          type: string
+          format: date-time
+
+    PostMessage:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+
+    CreateChatBody:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          $ref: "#/components/schemas/ChatType"
+        name:
+          type: string
+          description: Всегда есть у типов channel и group
+        image:
+          type: string
+          description: Всегда есть у типов channel и group
+        user_id:
+          type: string
+          description: Всегда есть у типа direct
+        is_public:
+          type: boolean
+          description: для channel и group
+
+    ChatType:
+      type: string
+      enum:
+        - direct
+        - channel
+        - group
+
+    AuthResponseBody:
+      type: object
+      required:
+        - token
+      additionalProperties: false
+      properties:
+        token:
+          type: string
