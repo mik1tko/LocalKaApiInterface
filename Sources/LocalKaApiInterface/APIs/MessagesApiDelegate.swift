@@ -81,7 +81,7 @@ public protocol MessagesApiDelegate: AnyObject {
   associatedtype AuthType
   /**
   GET /chats/{chat_id} */
-  func chatsChatIdGet(with req: Request, asAuthenticated user: AuthType, chatId: String, afterId: Int?, limit: Int?) async throws -> chatsChatIdGetResponse
+  func chatsChatIdGet(with req: Request, asAuthenticated user: AuthType, chatId: String, beforeId: Int?, limit: Int?) async throws -> chatsChatIdGetResponse
   /**
   POST /chats/{chat_id} */
   func chatsChatIdPost(with req: Request, asAuthenticated user: AuthType, body: PostMessage, chatId: UUID) async throws -> chatsChatIdPostResponse

@@ -105,7 +105,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: after_id
+        - name: before_id
           in: query
           schema:
             type: integer
