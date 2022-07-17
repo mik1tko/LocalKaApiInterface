@@ -59,7 +59,7 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
   groupForBearerAuth.on(.GET, "/chats/{chat_id}".asPathComponents) { (request: Request) async throws -> chatsChatIdGetResponse in
     let beforeId = try? request.query.get(Int.self, at: "beforeId")
     let limit = try? request.query.get(Int.self, at: "limit")
-    guard let chatId = request.parameters.get("chatId", as: String.self) else {
+    guard let chatId = request.parameters.get("chatId", as: UUID.self) else {
       throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter chatId")
     }
     return try await messages.chatsChatIdGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), chatId: chatId, beforeId: beforeId, limit: limit)
