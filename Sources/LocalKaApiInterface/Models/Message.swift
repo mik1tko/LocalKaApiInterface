@@ -12,14 +12,14 @@ public final class Message: Content {
 
     public var id: Int
     /** пока есть везде */
-    public var senderId: String?
+    public var sender: String?
     public var text: String?
     public var createAt: Date
     public var updateAt: Date?
 
-    public init(id: Int, senderId: String?, text: String?, createAt: Date, updateAt: Date?) { 
+    public init(id: Int, sender: String?, text: String?, createAt: Date, updateAt: Date?) { 
         self.id = id
-        self.senderId = senderId
+        self.sender = sender
         self.text = text
         self.createAt = createAt
         self.updateAt = updateAt

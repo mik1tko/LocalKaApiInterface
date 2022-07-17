@@ -332,7 +332,7 @@ components:
       properties:
         id:
           type: integer
-        sender_id:
+        sender:
           type: string
           description: пока есть везде
         text:
