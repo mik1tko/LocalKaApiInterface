@@ -191,6 +191,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Chat"
+        "204":
+          description: direct with user not yet created
 
 components:
   securitySchemes:

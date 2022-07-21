@@ -56,6 +56,7 @@ public enum chatsPostResponse: AsyncResponseEncodable {
 
 public enum usersUsernameDirectGetResponse: AsyncResponseEncodable {
   case http200(Chat)
+  case http204
 
   public func encodeResponse(for request: Request) -> EventLoopFuture<Response> {
     switch self {
@@ -64,6 +65,10 @@ public enum usersUsernameDirectGetResponse: AsyncResponseEncodable {
         response.status = HTTPStatus(statusCode: 200)
         return response
       }
+    case .http204:
+      let response = Response()
+      response.status = HTTPStatus(statusCode: 204)
+      return request.eventLoop.makeSucceededFuture(response)
     }
   }
 
@@ -72,6 +77,10 @@ public enum usersUsernameDirectGetResponse: AsyncResponseEncodable {
     case .http200(let content):
       var response = try await content.encodeResponse(for: request)
       response.status = HTTPStatus(statusCode: 200)
+      return response
+    case .http204:
+      let response = Response()
+      response.status = HTTPStatus(statusCode: 204)
       return response
     }
   }
