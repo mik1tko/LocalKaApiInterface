@@ -38,8 +38,8 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
   let groupForBearerAuth = app.grouped([authForBearerAuth])
   let groupForBearerAuthOptional = app.grouped([authForBearerAuthOptional])
   //for authentication
-  app.on(.GET, "/auth".asPathComponents) { (request: Request) async throws -> authGetResponse in
-    return try await authentication.authGet(with: request)
+  groupForBasicAuth.on(.GET, "/auth".asPathComponents) { (request: Request) async throws -> authGetResponse in
+    return try await authentication.authGet(with: request, asAuthenticated: request.auth.require(authForBasicAuth.authType()))
   }
   //for chats
   groupForBearerAuth.on(.GET, "/chats".asPathComponents) { (request: Request) async throws -> chatsGetResponse in

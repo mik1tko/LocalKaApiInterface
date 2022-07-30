@@ -33,5 +33,5 @@ public protocol AuthenticationApiDelegate: AnyObject {
   associatedtype AuthType
   /**
   GET /auth */
-  func authGet(with req: Request) async throws -> authGetResponse
+  func authGet(with req: Request, asAuthenticated user: AuthType) async throws -> authGetResponse
 }

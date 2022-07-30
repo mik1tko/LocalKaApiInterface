@@ -9,7 +9,7 @@ paths:
     get:
       tags: [Authentication]
       security:
-        - basicAuth: []
+        - BasicAuth: []
       responses:
         "200":
           description: OK
