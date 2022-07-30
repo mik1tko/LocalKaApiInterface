@@ -23,7 +23,7 @@ paths:
     get:
       tags: [Users]
       security:
-        - BearerAuthOptional: []
+        - BearerAuth: []
       parameters:
         - name: username
           in: path
@@ -40,7 +40,7 @@ paths:
 
   /users:
     post:
-      tags: [Users]
+      tags: [UsersOptional]
       security:
         - BearerAuthOptional: []
       requestBody:

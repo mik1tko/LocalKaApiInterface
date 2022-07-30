@@ -29,10 +29,10 @@ public protocol AuthenticationMiddleware: AsyncMiddleware {
 //Used when auth is not used
 public class DummyAuthType: Authenticatable {}
 
-public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth: AuthenticationMiddleware, authForBearerAuthOptional: AuthenticationMiddleware, authentication: AuthenticationApiDelegate, chats: ChatsApiDelegate, messages: MessagesApiDelegate, users: UsersApiDelegate>
-  (_ app: RoutesBuilder, authentication: authentication, chats: chats, messages: messages, users: users, authForBasicAuth: authForBasicAuth, authForBearerAuth: authForBearerAuth, authForBearerAuthOptional: authForBearerAuthOptional)
+public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth: AuthenticationMiddleware, authForBearerAuthOptional: AuthenticationMiddleware, authentication: AuthenticationApiDelegate, chats: ChatsApiDelegate, messages: MessagesApiDelegate, users: UsersApiDelegate, usersOptional: UsersOptionalApiDelegate>
+  (_ app: RoutesBuilder, authentication: authentication, chats: chats, messages: messages, users: users, usersOptional: usersOptional, authForBasicAuth: authForBasicAuth, authForBearerAuth: authForBearerAuth, authForBearerAuthOptional: authForBearerAuthOptional)
   throws
-  where authForBasicAuth.AuthType == authentication.AuthType, authForBasicAuth.AuthType == chats.AuthType, authForBasicAuth.AuthType == messages.AuthType, authForBasicAuth.AuthType == users.AuthType, authForBearerAuth.AuthType == authentication.AuthType, authForBearerAuth.AuthType == chats.AuthType, authForBearerAuth.AuthType == messages.AuthType, authForBearerAuth.AuthType == users.AuthType, authForBearerAuthOptional.AuthType == authentication.AuthType, authForBearerAuthOptional.AuthType == chats.AuthType, authForBearerAuthOptional.AuthType == messages.AuthType, authForBearerAuthOptional.AuthType == users.AuthType
+  where authForBasicAuth.AuthType == authentication.AuthType, authForBasicAuth.AuthType == chats.AuthType, authForBasicAuth.AuthType == messages.AuthType, authForBasicAuth.AuthType == users.AuthType, authForBasicAuth.AuthType == usersOptional.AuthType, authForBearerAuth.AuthType == authentication.AuthType, authForBearerAuth.AuthType == chats.AuthType, authForBearerAuth.AuthType == messages.AuthType, authForBearerAuth.AuthType == users.AuthType, authForBearerAuth.AuthType == usersOptional.AuthType, authForBearerAuthOptional.AuthType == authentication.AuthType, authForBearerAuthOptional.AuthType == chats.AuthType, authForBearerAuthOptional.AuthType == messages.AuthType, authForBearerAuthOptional.AuthType == users.AuthType, authForBearerAuthOptional.AuthType == usersOptional.AuthType
   {
   let groupForBasicAuth = app.grouped([authForBasicAuth])
   let groupForBearerAuth = app.grouped([authForBearerAuth])
@@ -79,15 +79,16 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
     return try await messages.usersUsernameDirectPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body, username: username)
   }
   //for users
-  groupForBearerAuthOptional.on(.POST, "/users".asPathComponents) { (request: Request) async throws -> usersPostResponse in
-    let body = try request.content.decode(CreateUserRequestBody.self)
-    return try await users.usersPost(with: request, asAuthenticated: request.auth.require(authForBearerAuthOptional.authType()), body: body)
-  }
-  groupForBearerAuthOptional.on(.GET, "/users/{username}".asPathComponents) { (request: Request) async throws -> usersUsernameGetResponse in
+  groupForBearerAuth.on(.GET, "/users/{username}".asPathComponents) { (request: Request) async throws -> usersUsernameGetResponse in
     guard let username = request.parameters.get("username", as: String.self) else {
       throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter username")
     }
-    return try await users.usersUsernameGet(with: request, asAuthenticated: request.auth.require(authForBearerAuthOptional.authType()), username: username)
+    return try await users.usersUsernameGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), username: username)
+  }
+  //for usersOptional
+  groupForBearerAuthOptional.on(.POST, "/users".asPathComponents) { (request: Request) async throws -> usersPostResponse in
+    let body = try request.content.decode(CreateUserRequestBody.self)
+    return try await usersOptional.usersPost(with: request, asAuthenticated: request.auth.require(authForBearerAuthOptional.authType()), body: body)
   }
 }
 
