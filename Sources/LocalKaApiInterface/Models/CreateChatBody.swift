@@ -27,4 +27,13 @@ public final class CreateChatBody: Content {
         self.userId = userId
         self.isPublic = isPublic
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case type = "type"
+        case name = "name"
+        case image = "image"
+        case userId = "user_id"
+        case isPublic = "is_public"
+    }
+
 }

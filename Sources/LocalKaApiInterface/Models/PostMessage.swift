@@ -15,4 +15,9 @@ public final class PostMessage: Content {
     public init(text: String) { 
         self.text = text
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case text = "text"
+    }
+
 }

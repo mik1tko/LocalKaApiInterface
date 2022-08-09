@@ -34,4 +34,16 @@ public final class Position: Content {
         self.area = area
         self.point = point
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case id = "id"
+        case createAt = "create_at"
+        case name = "name"
+        case creatorId = "creator_id"
+        case isPublic = "is_public"
+        case type = "type"
+        case area = "area"
+        case point = "point"
+    }
+
 }

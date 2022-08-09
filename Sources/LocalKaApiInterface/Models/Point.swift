@@ -17,4 +17,10 @@ public final class Point: Content {
         self.latitude = latitude
         self.longitude = longitude
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case latitude = "latitude"
+        case longitude = "longitude"
+    }
+
 }

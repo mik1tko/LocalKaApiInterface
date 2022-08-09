@@ -15,4 +15,9 @@ public final class AuthResponseBody: Content {
     public init(token: String) { 
         self.token = token
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case token = "token"
+    }
+
 }

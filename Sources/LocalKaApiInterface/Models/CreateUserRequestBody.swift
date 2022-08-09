@@ -19,4 +19,11 @@ public final class CreateUserRequestBody: Content {
         self.name = name
         self.avatar = avatar
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case username = "username"
+        case name = "name"
+        case avatar = "avatar"
+    }
+
 }

@@ -24,4 +24,13 @@ public final class Message: Content {
         self.createAt = createAt
         self.updateAt = updateAt
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case id = "id"
+        case sender = "sender"
+        case text = "text"
+        case createAt = "create_at"
+        case updateAt = "update_at"
+    }
+
 }

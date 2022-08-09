@@ -17,4 +17,10 @@ public final class PositionArea: Content {
         self.topLeft = topLeft
         self.bottomRight = bottomRight
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case topLeft = "top_left"
+        case bottomRight = "bottom_right"
+    }
+
 }

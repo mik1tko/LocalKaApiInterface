@@ -38,4 +38,18 @@ public final class Chat: Content {
         self.username = username
         self.isPublic = isPublic
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case id = "id"
+        case createAt = "create_at"
+        case updateAt = "update_at"
+        case lastMessageAt = "last_message_at"
+        case type = "type"
+        case name = "name"
+        case image = "image"
+        case creatorUsername = "creator_username"
+        case username = "username"
+        case isPublic = "is_public"
+    }
+
 }
