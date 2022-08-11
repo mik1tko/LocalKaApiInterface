@@ -60,6 +60,36 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
 
+  /users/batch:
+    post:
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - users
+              properties:
+                channels:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object 
+                additionalProperties: 
+                  $ref: "#/components/schemas/User"
+
   # mark: chats
   /chats:
     get:
@@ -150,6 +180,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Message"
+
+  /chats/messages/batch:
+    post:
+      tags: [Messages]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - channels
+              properties:
+                channels:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object 
+                additionalProperties: 
+                  $ref: "#/components/schemas/Message"
 
   /users/{id}/direct:
     post:

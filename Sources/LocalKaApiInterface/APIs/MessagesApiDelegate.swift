@@ -54,6 +54,30 @@ public enum chatsChatIdPostResponse: AsyncResponseEncodable {
 }
 
 
+public enum chatsMessagesBatchPostResponse: AsyncResponseEncodable {
+  case http200([String:Message])
+
+  public func encodeResponse(for request: Request) -> EventLoopFuture<Response> {
+    switch self {
+    case .http200(let content):
+      return content.encodeResponse(for: request).map { (response: Response) -> (Response) in
+        response.status = HTTPStatus(statusCode: 200)
+        return response
+      }
+    }
+  }
+
+  public func encodeResponse(for request: Request) async throws -> Response {
+    switch self {
+    case .http200(let content):
+      var response = try await content.encodeResponse(for: request)
+      response.status = HTTPStatus(statusCode: 200)
+      return response
+    }
+  }
+}
+
+
 public enum usersIdDirectPostResponse: AsyncResponseEncodable {
   case http200(Message)
 
@@ -85,6 +109,9 @@ public protocol MessagesApiDelegate: AnyObject {
   /**
   POST /chats/{chat_id} */
   func chatsChatIdPost(with req: Request, asAuthenticated user: AuthType, body: PostMessage, chatId: UUID) async throws -> chatsChatIdPostResponse
+  /**
+  POST /chats/messages/batch */
+  func chatsMessagesBatchPost(with req: Request, asAuthenticated user: AuthType, body: Body1) async throws -> chatsMessagesBatchPostResponse
   /**
   POST /users/{id}/direct */
   func usersIdDirectPost(with req: Request, asAuthenticated user: AuthType, body: PostMessage, id: UUID) async throws -> usersIdDirectPostResponse

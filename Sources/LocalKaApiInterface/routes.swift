@@ -71,6 +71,10 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
     let body = try request.content.decode(PostMessage.self)
     return try await messages.chatsChatIdPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body, chatId: chatId)
   }
+  groupForBearerAuth.on(.POST, "/chats/messages/batch".asPathComponents) { (request: Request) async throws -> chatsMessagesBatchPostResponse in
+    let body = try request.content.decode(Body1.self)
+    return try await messages.chatsMessagesBatchPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body)
+  }
   groupForBearerAuth.on(.POST, "/users/{id}/direct".asPathComponents) { (request: Request) async throws -> usersIdDirectPostResponse in
     guard let id = request.parameters.get("id", as: UUID.self) else {
       throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter id")
@@ -79,6 +83,10 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
     return try await messages.usersIdDirectPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body, id: id)
   }
   //for users
+  groupForBearerAuth.on(.POST, "/users/batch".asPathComponents) { (request: Request) async throws -> usersBatchPostResponse in
+    let body = try request.content.decode(Body.self)
+    return try await users.usersBatchPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body)
+  }
   groupForBearerAuth.on(.GET, "/users/{id}".asPathComponents) { (request: Request) async throws -> usersIdGetResponse in
     guard let id = request.parameters.get("id", as: UUID.self) else {
       throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter id")
