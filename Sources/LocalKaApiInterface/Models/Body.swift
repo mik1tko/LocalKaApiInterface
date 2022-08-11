@@ -10,14 +10,14 @@ import Vapor
 
 public final class Body: Content {
 
-    public var channels: [UUID]?
+    public var users: [UUID]
 
-    public init(channels: [UUID]?) { 
-        self.channels = channels
+    public init(users: [UUID]) { 
+        self.users = users
     }
 
     public enum CodingKeys: String, CodingKey { 
-        case channels = "channels"
+        case users = "users"
     }
 
 }

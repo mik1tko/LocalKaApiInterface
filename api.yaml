@@ -75,7 +75,7 @@ paths:
               required:
                 - users
               properties:
-                channels:
+                users:
                   type: array
                   items:
                     type: string
