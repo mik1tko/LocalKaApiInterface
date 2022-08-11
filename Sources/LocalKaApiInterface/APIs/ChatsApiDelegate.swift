@@ -54,7 +54,7 @@ public enum chatsPostResponse: AsyncResponseEncodable {
 }
 
 
-public enum usersUsernameDirectGetResponse: AsyncResponseEncodable {
+public enum usersIdDirectGetResponse: AsyncResponseEncodable {
   case http200(Chat)
   case http204
 
@@ -95,6 +95,6 @@ public protocol ChatsApiDelegate: AnyObject {
   POST /chats */
   func chatsPost(with req: Request, asAuthenticated user: AuthType, body: CreateChatBody) async throws -> chatsPostResponse
   /**
-  GET /users/{username}/direct */
-  func usersUsernameDirectGet(with req: Request, asAuthenticated user: AuthType, username: String) async throws -> usersUsernameDirectGetResponse
+  GET /users/{id}/direct */
+  func usersIdDirectGet(with req: Request, asAuthenticated user: AuthType, id: UUID) async throws -> usersIdDirectGetResponse
 }

@@ -54,7 +54,7 @@ public enum chatsChatIdPostResponse: AsyncResponseEncodable {
 }
 
 
-public enum usersUsernameDirectPostResponse: AsyncResponseEncodable {
+public enum usersIdDirectPostResponse: AsyncResponseEncodable {
   case http200(Message)
 
   public func encodeResponse(for request: Request) -> EventLoopFuture<Response> {
@@ -86,6 +86,6 @@ public protocol MessagesApiDelegate: AnyObject {
   POST /chats/{chat_id} */
   func chatsChatIdPost(with req: Request, asAuthenticated user: AuthType, body: PostMessage, chatId: UUID) async throws -> chatsChatIdPostResponse
   /**
-  POST /users/{username}/direct */
-  func usersUsernameDirectPost(with req: Request, asAuthenticated user: AuthType, body: PostMessage, username: String) async throws -> usersUsernameDirectPostResponse
+  POST /users/{id}/direct */
+  func usersIdDirectPost(with req: Request, asAuthenticated user: AuthType, body: PostMessage, id: UUID) async throws -> usersIdDirectPostResponse
 }

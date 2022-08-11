@@ -6,7 +6,7 @@ import Vapor
 // Template Input: /APIs.Users
 
 
-public enum usersUsernameGetResponse: AsyncResponseEncodable {
+public enum usersIdGetResponse: AsyncResponseEncodable {
   case http200(User)
 
   public func encodeResponse(for request: Request) -> EventLoopFuture<Response> {
@@ -32,6 +32,6 @@ public enum usersUsernameGetResponse: AsyncResponseEncodable {
 public protocol UsersApiDelegate: AnyObject {
   associatedtype AuthType
   /**
-  GET /users/{username} */
-  func usersUsernameGet(with req: Request, asAuthenticated user: AuthType, username: String) async throws -> usersUsernameGetResponse
+  GET /users/{id} */
+  func usersIdGet(with req: Request, asAuthenticated user: AuthType, id: UUID) async throws -> usersIdGetResponse
 }

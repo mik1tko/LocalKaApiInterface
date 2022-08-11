@@ -49,11 +49,11 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
     let body = try request.content.decode(CreateChatBody.self)
     return try await chats.chatsPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body)
   }
-  groupForBearerAuth.on(.GET, "/users/{username}/direct".asPathComponents) { (request: Request) async throws -> usersUsernameDirectGetResponse in
-    guard let username = request.parameters.get("username", as: String.self) else {
-      throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter username")
+  groupForBearerAuth.on(.GET, "/users/{id}/direct".asPathComponents) { (request: Request) async throws -> usersIdDirectGetResponse in
+    guard let id = request.parameters.get("id", as: UUID.self) else {
+      throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter id")
     }
-    return try await chats.usersUsernameDirectGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), username: username)
+    return try await chats.usersIdDirectGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), id: id)
   }
   //for messages
   groupForBearerAuth.on(.GET, "/chats/{chat_id}".asPathComponents) { (request: Request) async throws -> chatsChatIdGetResponse in
@@ -71,19 +71,19 @@ public func routes<authForBasicAuth: AuthenticationMiddleware, authForBearerAuth
     let body = try request.content.decode(PostMessage.self)
     return try await messages.chatsChatIdPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body, chatId: chatId)
   }
-  groupForBearerAuth.on(.POST, "/users/{username}/direct".asPathComponents) { (request: Request) async throws -> usersUsernameDirectPostResponse in
-    guard let username = request.parameters.get("username", as: String.self) else {
-      throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter username")
+  groupForBearerAuth.on(.POST, "/users/{id}/direct".asPathComponents) { (request: Request) async throws -> usersIdDirectPostResponse in
+    guard let id = request.parameters.get("id", as: UUID.self) else {
+      throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter id")
     }
     let body = try request.content.decode(PostMessage.self)
-    return try await messages.usersUsernameDirectPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body, username: username)
+    return try await messages.usersIdDirectPost(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), body: body, id: id)
   }
   //for users
-  groupForBearerAuth.on(.GET, "/users/{username}".asPathComponents) { (request: Request) async throws -> usersUsernameGetResponse in
-    guard let username = request.parameters.get("username", as: String.self) else {
-      throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter username")
+  groupForBearerAuth.on(.GET, "/users/{id}".asPathComponents) { (request: Request) async throws -> usersIdGetResponse in
+    guard let id = request.parameters.get("id", as: UUID.self) else {
+      throw Abort(HTTPResponseStatus.badRequest, reason: "Missing parameter id")
     }
-    return try await users.usersUsernameGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), username: username)
+    return try await users.usersIdGet(with: request, asAuthenticated: request.auth.require(authForBearerAuth.authType()), id: id)
   }
   //for usersOptional
   groupForBearerAuthOptional.on(.POST, "/users".asPathComponents) { (request: Request) async throws -> usersPostResponse in

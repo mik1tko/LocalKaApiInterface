@@ -20,13 +20,13 @@ public final class Chat: Content {
     /** Всегда есть у типов channel и group */
     public var image: String?
     /** Для group */
-    public var creatorUsername: String?
+    public var creatorId: UUID?
     /** Всегда есть у типа direct */
-    public var username: String?
+    public var userId: UUID?
     /** для channel и group */
     public var isPublic: Bool?
 
-    public init(id: UUID, createAt: Date, updateAt: Date, lastMessageAt: Date?, type: ChatType, name: String?, image: String?, creatorUsername: String?, username: String?, isPublic: Bool?) { 
+    public init(id: UUID, createAt: Date, updateAt: Date, lastMessageAt: Date?, type: ChatType, name: String?, image: String?, creatorId: UUID?, userId: UUID?, isPublic: Bool?) { 
         self.id = id
         self.createAt = createAt
         self.updateAt = updateAt
@@ -34,8 +34,8 @@ public final class Chat: Content {
         self.type = type
         self.name = name
         self.image = image
-        self.creatorUsername = creatorUsername
-        self.username = username
+        self.creatorId = creatorId
+        self.userId = userId
         self.isPublic = isPublic
     }
 
@@ -47,8 +47,8 @@ public final class Chat: Content {
         case type = "type"
         case name = "name"
         case image = "image"
-        case creatorUsername = "creator_username"
-        case username = "username"
+        case creatorId = "creator_id"
+        case userId = "user_id"
         case isPublic = "is_public"
     }
 

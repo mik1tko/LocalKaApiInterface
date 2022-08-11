@@ -10,13 +10,15 @@ import Vapor
 
 public final class User: Content {
 
+    public var id: UUID
     public var username: String
     public var name: String?
     public var avatar: String?
     public var createAt: Date
     public var updateAt: Date?
 
-    public init(username: String, name: String?, avatar: String?, createAt: Date, updateAt: Date?) { 
+    public init(id: UUID, username: String, name: String?, avatar: String?, createAt: Date, updateAt: Date?) { 
+        self.id = id
         self.username = username
         self.name = name
         self.avatar = avatar
@@ -25,6 +27,7 @@ public final class User: Content {
     }
 
     public enum CodingKeys: String, CodingKey { 
+        case id = "id"
         case username = "username"
         case name = "name"
         case avatar = "avatar"

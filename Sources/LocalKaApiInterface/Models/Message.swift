@@ -12,14 +12,14 @@ public final class Message: Content {
 
     public var id: Int
     /** пока есть везде */
-    public var sender: String?
+    public var senderId: UUID?
     public var text: String?
     public var createAt: Date
     public var updateAt: Date?
 
-    public init(id: Int, sender: String?, text: String?, createAt: Date, updateAt: Date?) { 
+    public init(id: Int, senderId: UUID?, text: String?, createAt: Date, updateAt: Date?) { 
         self.id = id
-        self.sender = sender
+        self.senderId = senderId
         self.text = text
         self.createAt = createAt
         self.updateAt = updateAt
@@ -27,7 +27,7 @@ public final class Message: Content {
 
     public enum CodingKeys: String, CodingKey { 
         case id = "id"
-        case sender = "sender"
+        case senderId = "sender_id"
         case text = "text"
         case createAt = "create_at"
         case updateAt = "update_at"

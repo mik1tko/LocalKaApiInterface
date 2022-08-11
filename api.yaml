@@ -19,17 +19,18 @@ paths:
                 $ref: "#/components/schemas/AuthResponseBody"
 
   # mark: users
-  /users/{username}:
+  /users/{id}:
     get:
       tags: [Users]
       security:
         - BearerAuth: []
       parameters:
-        - name: username
+        - name: id
           in: path
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         "200":
           description: OK
@@ -38,6 +39,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
 
+  # TODO: remove it
   /users:
     post:
       tags: [UsersOptional]
@@ -149,17 +151,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/Message"
 
-  /users/{username}/direct:
+  /users/{id}/direct:
     post:
       tags: [Messages]
       security:
         - BearerAuth: []
       parameters:
-        - name: username
+        - name: id
           in: path
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -179,11 +182,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: username
+        - name: id
           in: path
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         "200":
           description: OK
@@ -210,10 +214,14 @@ components:
     User:
       type: object
       required:
+        - id
         - username
         - create_at
       additionalProperties: false
       properties:
+        id:
+          type: string
+          format: uuid
         username:
           type: string
         name:
@@ -268,11 +276,13 @@ components:
         image:
           type: string
           description: Всегда есть у типов channel и group
-        creator_username:
+        creator_id:
           type: string
+          format: uuid
           description: Для group
-        username:
+        user_id:
           type: string
+          format: uuid
           description: Всегда есть у типа direct
         is_public:
           type: boolean
@@ -334,8 +344,9 @@ components:
       properties:
         id:
           type: integer
-        sender:
+        sender_id:
           type: string
+          format: uuid
           description: пока есть везде
         text:
           type: string
